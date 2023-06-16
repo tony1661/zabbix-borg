@@ -10,9 +10,11 @@ Once that is complete, you need to run the `cron-scripts/borg-check.sh` script. 
 The script takes 3 parameters.
 
 Usage: `cron-scripts/borg-check.sh <remote|local> <path-to-status.txt-file> [ssh-host-string]`
- - <remote|local> - is the repo a local repo or a remote repo over ssh
- - <path-to-status.txt-file> - path to the status file inside the repo. If it is a remote directory, use an absolute path
- - [ssh-host-string] - only needed for remote repos. Should be like this: user@server.domain.com
+ - *<remote|local>* - is the repo a local repo or a remote repo over ssh
+ - *<path-to-status.txt-file>* - path to the status file inside the repo. If it is a remote directory, use an absolute path
+ - *[ssh-host-string]* - only needed for remote repos. Should be like this: user@server.domain.com
+
+ **Example:** /etc/cron.d/borg-check-remote.sh remote /home/borg/repo-dir/status.txt user@server.domain.com
 
 This script will populate a status.txt file inside the repo folder. This is true for both local and remote repositories. Below is a sample of what the status.txt file will be populated with:
 ```
