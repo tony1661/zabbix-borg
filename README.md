@@ -1,5 +1,7 @@
 A Zabbix template for monitoring Borg backup repositories. Requires Borg binary to be available in the system being monitored. Monitoring occurs on the backup server, though is possible to have the backup server check remote repositories via SSH for services such as rsync.net.
 
+In this documentation, there are multiple references to Local and Remote repositories. Just to be clear, Local repos are ones located on the server that the zabbix-agent is running on. Remote repos are ones where the borg repo is located on a different server than the zabbox-agent that will be doing the monitoring.
+
 # Installation
 ## General Steps
 1. Copy `zabbix_agentd.d/borg.conf` to the Zabbix agent's configuration directory (usually located at `/etc/zabbix`). If using unencrypted repositories, be sure to read the cronjob scripts and uncomment line needed.
