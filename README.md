@@ -55,14 +55,15 @@ All of the collected data will be placed in your Zabbix host assuming you have t
 # Installation
 ## General Steps
 1. Copy `zabbix_agentd.d/borg.conf` to the Zabbix agent's configuration directory (usually located at `/etc/zabbix`). If using unencrypted repositories, be sure to read the cronjob scripts and uncomment line needed.
-2. Import template configuration `templates/borg.xml` to Zabbix web frontend.
-   - Importing the borg4.xml template will actually import both the local and remote templates. At this time, the borg62.xml file is experimental.
-3. Open the `zabbix_agentd.d/borg.conf` file and on the first line you will need to edit the part that says `/home/*/*/README` to be wherever your README files are located for your borg repos.
+2. Open the `zabbix_agentd.d/borg.conf` file and on the first line you will need to edit the part that says `/home/*/*/README` to be wherever your README files are located for your borg repos.
    - For remote repositories, you will need to change the `/home/borg/*/*/README` line a bit lower down.
    - Absolute paths are required.
 	- Incase you are not aware, each borg repo contains a README file by default. The Zabbix discovery item uses this file to discover new repositories.
+3. Import template configuration `templates/borg.xml` to Zabbix web frontend.
+   - Importing the borg4.xml template will actually import both the local and remote templates.
+   - At this time, the borg62.xml file is experimental.
 4. Restart the zabbix-agent service with the command `sudo systemctl restart zabbix-agent.service` or `sudo systemctl restart zabbix-agent2.service`
-5. In the web
+5. In the web interface, add the template that you imported to your host.
 
 ## Additional Steps for Remote Repositories
 1. You will need to make sure that the zabbix user on the system has their ssh key configured as an authorized user on the remote system. You can do this by entering the following commands:
