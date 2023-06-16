@@ -2,30 +2,6 @@ A Zabbix template for monitoring Borg backup repositories. Requires Borg binary 
 
 In this documentation, there are multiple references to Local and Remote repositories. Just to be clear, Local repos are ones located on the server that the zabbix-agent is running on. Remote repos are ones where the borg repo is located on a different server than the zabbox-agent that will be doing the monitoring.
 
-# Installation
-## General Steps
-1. Copy `zabbix_agentd.d/borg.conf` to the Zabbix agent's configuration directory (usually located at `/etc/zabbix`). If using unencrypted repositories, be sure to read the cronjob scripts and uncomment line needed.
-2. Import template configuration `templates/borg.xml` to Zabbix web frontend.
-   - Importing the borg4.xml template will actually import both the local and remote templates. At this time, the borg62.xml file is experimental.
-3. Open the `zabbix_agentd.d/borg.conf` file and on the first line you will need to edit the part that says `/home/*/*/README` to be wherever your README files are located for your borg repos.
-   - For remote repositories, you will need to change the `/home/borg/*/*/README` line a bit lower down.
-   - Absolute paths are required.
-	- Incase you are not aware, each borg repo contains a README file by default. The Zabbix discovery item uses this file to discover new repositories.
-4. Restart the zabbix-agent service with the command `sudo systemctl restart zabbix-agent.service` or `sudo systemctl restart zabbix-agent2.service`
-5. In the web
-
-## Additional Steps for Remote Repositories
-1. You will need to make sure that the zabbix user on the system has their ssh key configured as an authorized user on the remote system. You can do this by entering the following commands:
-   - `sudo mkdir /var/lib/zabbix/.ssh && sudo chown zabbix:zabbix /var/lib/zabbix/.ssh`
-   - `sudo -u zabbix ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f /var/lib/zabbix/.ssh/id_rsa`
-   - `cat /var/lib/zabbix/.ssh/id_rsa.pub | ssh user@host.rsync.net 'dd of=.ssh/authorized_keys oflag=append conv=notrunc'`
-   - `ssh-keyscan de1631.rsync.net | sudo -u zabbix tee --append /var/lib/zabbix/.ssh/known_hosts`
-2. The templates expect the following MACROs to be setup in the host that will be doing the monitoring. These can be setup in the web interface of Zabbix.
-   - {$SSH_USER} - This is the user portion of an ssh string **user**@server.domain.com
-   - {$SSH_HOST} - This is the host portion of an ssh string user@**host.domain.com**
-
-![macro screenshot](images/macros.png "Marcos")
-
 # How it works
 This plugin assumes that you have taken your backup and placed it in a local or remote folder.
 
@@ -73,6 +49,30 @@ Archive consistency check complete, no problems found.
 Zabbix will now parse this file using the UserParameters in `zabbix_agentd.d/borg.conf` to collect the data.
 
 All of the collected data will be placed in your Zabbix host assuming you have the templated added.
+
+# Installation
+## General Steps
+1. Copy `zabbix_agentd.d/borg.conf` to the Zabbix agent's configuration directory (usually located at `/etc/zabbix`). If using unencrypted repositories, be sure to read the cronjob scripts and uncomment line needed.
+2. Import template configuration `templates/borg.xml` to Zabbix web frontend.
+   - Importing the borg4.xml template will actually import both the local and remote templates. At this time, the borg62.xml file is experimental.
+3. Open the `zabbix_agentd.d/borg.conf` file and on the first line you will need to edit the part that says `/home/*/*/README` to be wherever your README files are located for your borg repos.
+   - For remote repositories, you will need to change the `/home/borg/*/*/README` line a bit lower down.
+   - Absolute paths are required.
+	- Incase you are not aware, each borg repo contains a README file by default. The Zabbix discovery item uses this file to discover new repositories.
+4. Restart the zabbix-agent service with the command `sudo systemctl restart zabbix-agent.service` or `sudo systemctl restart zabbix-agent2.service`
+5. In the web
+
+## Additional Steps for Remote Repositories
+1. You will need to make sure that the zabbix user on the system has their ssh key configured as an authorized user on the remote system. You can do this by entering the following commands:
+   - `sudo mkdir /var/lib/zabbix/.ssh && sudo chown zabbix:zabbix /var/lib/zabbix/.ssh`
+   - `sudo -u zabbix ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f /var/lib/zabbix/.ssh/id_rsa`
+   - `cat /var/lib/zabbix/.ssh/id_rsa.pub | ssh user@host.rsync.net 'dd of=.ssh/authorized_keys oflag=append conv=notrunc'`
+   - `ssh-keyscan de1631.rsync.net | sudo -u zabbix tee --append /var/lib/zabbix/.ssh/known_hosts`
+2. The templates expect the following MACROs to be setup in the host that will be doing the monitoring. These can be setup in the web interface of Zabbix.
+   - {$SSH_USER} - This is the user portion of an ssh string **user**@server.domain.com
+   - {$SSH_HOST} - This is the host portion of an ssh string user@**host.domain.com**
+
+![macro screenshot](images/macros.png "Marcos")
 
 # Notes
 This plugin uses discovery capabilities provided by Zabbix to locate backup repositories. Since all commands are executed by `zabbix` user, appropriate permissions must be granted to all backup repositories.
