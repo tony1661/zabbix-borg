@@ -664,7 +664,7 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>{#HOST}:{#DIR} volume compressed size</name>
+                            <name>{#HOST}:{#DIR} volume compressed size - remote</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
@@ -708,7 +708,7 @@
                             <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#HOST}:{#DIR} volume deduplicated size</name>
+                            <name>{#HOST}:{#DIR} volume deduplicated size - remote</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
@@ -752,7 +752,7 @@
                             <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#HOST}:{#DIR} volume original size</name>
+                            <name>{#HOST}:{#DIR} volume original size - remote</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
@@ -796,7 +796,7 @@
                             <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#HOST}:{#DIR} end timestamp</name>
+                            <name>{#HOST}:{#DIR} end timestamp - remote</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
@@ -840,7 +840,7 @@
                             <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#HOST}:{#DIR} end time</name>
+                            <name>{#HOST}:{#DIR} end time - remote</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
@@ -884,7 +884,7 @@
                             <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#HOST}:{#DIR} start timestamp</name>
+                            <name>{#HOST}:{#DIR} start timestamp - remote</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
@@ -928,7 +928,7 @@
                             <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#HOST}:{#DIR} start time</name>
+                            <name>{#HOST}:{#DIR} start time - remote</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
@@ -972,7 +972,7 @@
                             <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#HOST}:{#DIR} last backup compressed size</name>
+                            <name>{#HOST}:{#DIR} last backup compressed size - remote</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
@@ -1016,7 +1016,7 @@
                             <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#HOST}:{#DIR} last backup deduplicated size</name>
+                            <name>{#HOST}:{#DIR} last backup deduplicated size - remote</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
@@ -1060,7 +1060,7 @@
                             <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#HOST}:{#DIR} last backup original size</name>
+                            <name>{#HOST}:{#DIR} last backup original size - remote</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
@@ -1109,7 +1109,7 @@
                             <expression>{Template App Borg Backup Remote:borg.end_timestamp_remote[{#PATH},{$SSH_USER},{$SSH_HOST}].fuzzytime(108000)}=0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
-                            <name>{#HOST}:{#DIR} backup too old</name>
+                            <name>{#HOST}:{#DIR} backup too old - remote</name>
                             <correlation_mode>0</correlation_mode>
                             <correlation_tag/>
                             <url/>
@@ -1124,7 +1124,7 @@
                     </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
-                            <name>Borg {#HOST}:{#DIR} last backup</name>
+                            <name>Borg {#HOST}:{#DIR} last backup - remote</name>
                             <width>900</width>
                             <height>200</height>
                             <yaxismin>0.0000</yaxismin>
@@ -1168,7 +1168,7 @@
                             </graph_items>
                         </graph_prototype>
                         <graph_prototype>
-                            <name>Borg {#HOST}:{#DIR} volume size</name>
+                            <name>Borg {#HOST}:{#DIR} volume size - remote</name>
                             <width>900</width>
                             <height>200</height>
                             <yaxismin>0.0000</yaxismin>
