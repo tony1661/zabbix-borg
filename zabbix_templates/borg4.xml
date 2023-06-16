@@ -1668,7 +1668,7 @@
                     </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
-                            <name>Borg {#HOST}:{#DIR} last backup</name>
+                            <name>Borg {#HOST}:{#DIR} last backup - remote</name>
                             <width>900</width>
                             <height>200</height>
                             <yaxismin>0.0000</yaxismin>
