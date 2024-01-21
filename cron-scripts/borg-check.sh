@@ -27,7 +27,7 @@ ssh_string=$3
 #export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
 
 # Comment to disable encrypted repos
-export BORG_PASSPHRASE='SaPPhire45!'
+export BORG_PASSPHRASE=''
 
 if [ $1 = 'local' ]; then
         #save output in a variable to avoid overwritting the file partially
