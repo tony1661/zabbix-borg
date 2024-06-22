@@ -70,7 +70,7 @@ All of the collected data will be placed in your Zabbix host assuming you have t
    - `sudo mkdir -p /var/lib/zabbix/.ssh && sudo chown zabbix:zabbix /var/lib/zabbix/.ssh`
    - `sudo -u zabbix ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f /var/lib/zabbix/.ssh/id_rsa`
    - `cat /var/lib/zabbix/.ssh/id_rsa.pub | ssh user@host.rsync.net 'dd of=.ssh/authorized_keys oflag=append conv=notrunc'`
-   - `ssh-keyscan de1631.rsync.net | sudo -u zabbix tee --append /var/lib/zabbix/.ssh/known_hosts`
+   - `ssh-keyscan host.rsync.net | sudo -u zabbix tee --append /var/lib/zabbix/.ssh/known_hosts`
 2. The templates expect the following MACROs to be setup in the host that will be doing the monitoring. These can be setup in the web interface of Zabbix.
    - {$SSH_USER} - This is the user portion of an ssh string **user**@server.domain.com
    - {$SSH_HOST} - This is the host portion of an ssh string user@**host.domain.com**
