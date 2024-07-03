@@ -14,6 +14,7 @@ Usage: `cron-scripts/borg-check.sh <remote|local> <path-to-status.txt-file>`
  - *<path-to-status.txt-file>* - path to the status file inside the repo. Use an absolute path
 
  **Example:** /etc/cron.d/borg-check.sh local /data/home/borg/status.txt
+ 
  **Example:** /etc/cron.d/borg-check.sh remote user@server.domain.com:/data/home/borg/status.txt
 
 This script will populate a status.txt file inside the repo folder. This is true for both local and remote repositories. Below is a sample of what the status.txt file will be populated with:
