@@ -36,6 +36,7 @@ if [ $2 = 'local' ]; then
 		echo "$info" > $status_file
 	elif [ $1 = 'check' ]; then
 		check=$(borg check -v $repo_dir 2>&1)
+		echo 'Time: '$(date +"%Y-%m-%d %H:%M:%S") > $repo_dir'/check.txt'
 		echo "$check" >> $repo_dir'/check.txt'
 	fi
 elif [ $2 = 'remote' ]; then
@@ -47,7 +48,8 @@ elif [ $2 = 'remote' ]; then
                 info=$(borg info --last 1 $ssh_string:$repo_dir)
                 echo "$info" | ssh $ssh_string 'dd of='$status_file
         elif [ $1 = 'check' ]; then
-                check=$(borg check -v $ssh_string:$repo_dir 2>&1)
+		#check=$(borg check -v $ssh_string:$repo_dir 2>&1)
+		echo 'Time: '$(date +"%Y-%m-%d %H:%M:%S") | ssh $ssh_string 'dd of='$repo_dir'/check.txt conv=notrunc'
                 echo "$check" | ssh $ssh_string 'dd of='$repo_dir'/check.txt oflag=append conv=notrunc'
         fi
 else
