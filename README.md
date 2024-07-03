@@ -74,6 +74,8 @@ All of the collected data will be placed in your Zabbix host assuming you have t
 2. The templates expect the following MACROs to be setup in the host that will be doing the monitoring. These can be setup in the web interface of Zabbix.
    - {$SSH_USER} - This is the user portion of an ssh string **user**@server.domain.com
    - {$SSH_HOST} - This is the host portion of an ssh string user@**host.domain.com**
+3. Change the zabbix user's home dir to be /var/lib/zabbix/
+   - `usermod -d /var/lib/zabbix/ zabbix`
 
 ![macro screenshot](images/macros.png "Marcos")
 
