@@ -1,6 +1,12 @@
 #!/bin/bash
-
 # This script is used with Zabbix to gather the output of the borg repos and place them in a "status.txt" file inside the repo
+
+# Uncomment to enable unknown unencrypted repos
+#export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
+
+# Uncomment to enable encrypted repos and set the passphrase
+#export BORG_PASSPHRASE=''
+
 
 RED='\033[1;31m'
 NC='\033[0m' # No Color
@@ -20,17 +26,13 @@ if [ $# -eq 0 ]; then
         exit 1
 fi
 
+# vars
 status_file=$(echo "$2" | cut -d ":" -f 2)
 ssh_string=$(echo "$2" | cut -d ":" -f 1)
-# vars
 repo_dir=$(dirname $status_file)
 
 
-# Uncomment to enable unknown unencrypted repos
-#export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
 
-# Uncomment to enable encrypted repos and set the passphrase
-#export BORG_PASSPHRASE=''
 
 if [ $1 = 'local' ]; then
         #save output in a variable to avoid overwritting the file partially
