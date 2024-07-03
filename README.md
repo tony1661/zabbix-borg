@@ -55,16 +55,16 @@ All of the collected data will be placed in your Zabbix host assuming you have t
 
 # Installation
 ## General Steps
-1. Copy `zabbix_agentd.d/borg.conf` to the Zabbix agent's configuration directory (usually located at `/etc/zabbix`). If using unencrypted repositories, be sure to read the cronjob scripts and uncomment line needed.
-2. Open the `zabbix_agentd.d/borg.conf` file and on the first line you will need to edit the part that says `/home/*/*/README` to be wherever your README files are located for your borg repos.
-   - For remote repositories, you will need to change the `/home/borg/*/*/README` line a bit lower down.
-   - Absolute paths are required.
-	- Incase you are not aware, each borg repo contains a README file by default. The Zabbix discovery item uses this file to discover new repositories.
+1. Add `cron-scripts/borg-check.sh` to a cronjob. If using encrypted repositories, be sure to read the cronjob scripts and uncomment line needed.
+2. Copy `zabbix_agentd.d/borg.conf` to the Zabbix agent's configuration directory (usually located at `/etc/zabbix`).
 3. Import template configuration `templates/borg.xml` to Zabbix web frontend.
-   - Importing the borg4.xml template will actually import both the local and remote templates.
-   - At this time, the borg62.xml file is experimental.
 4. Restart the zabbix-agent service with the command `sudo systemctl restart zabbix-agent.service` or `sudo systemctl restart zabbix-agent2.service`
 5. In the web interface, add the template that you imported to your host.
+6. Go to your Host and add the following MACROs where necessary
+   - {$SSH_USER} - This is the user portion of an ssh string **user**@server.domain.com
+   - {$SSH_HOST} - This is the host portion of an ssh string user@**host.domain.com**
+   - {$BORG_LOCAL_DIR} - This is the location where your local Borg repos are.
+   - {$BORG_REMOTE_DIR} - This is the location where your remote Borg repos are.
 
 ## Additional Steps for Remote Repositories
 1. You will need to make sure that the zabbix user on the system has their ssh key configured as an authorized user on the remote system. You can do this by entering the following commands:
@@ -72,10 +72,7 @@ All of the collected data will be placed in your Zabbix host assuming you have t
    - `sudo -u zabbix ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f /var/lib/zabbix/.ssh/id_rsa`
    - `cat /var/lib/zabbix/.ssh/id_rsa.pub | ssh user@host.rsync.net 'dd of=.ssh/authorized_keys oflag=append conv=notrunc'`
    - `ssh-keyscan host.rsync.net | sudo -u zabbix tee --append /var/lib/zabbix/.ssh/known_hosts`
-2. The templates expect the following MACROs to be setup in the host that will be doing the monitoring. These can be setup in the web interface of Zabbix.
-   - {$SSH_USER} - This is the user portion of an ssh string **user**@server.domain.com
-   - {$SSH_HOST} - This is the host portion of an ssh string user@**host.domain.com**
-3. Change the zabbix user's home dir to be /var/lib/zabbix/
+2. Change the zabbix user's home dir to be /var/lib/zabbix/
    - `usermod -d /var/lib/zabbix/ zabbix`
 
 ![macro screenshot](images/macros.png "Marcos")
