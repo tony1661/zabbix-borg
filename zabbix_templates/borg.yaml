@@ -1,0 +1,412 @@
+zabbix_export:
+  version: '6.2'
+  date: '2024-07-03T20:00:45Z'
+  template_groups:
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    -
+      uuid: 4e9984c170fb412d8cc34c22af45bc8f
+      template: 'Template App Borg Backup'
+      name: 'Template App Borg Backup'
+      groups:
+        -
+          name: Templates
+      discovery_rules:
+        -
+          uuid: 145f3b487dcb4b6e8b824b7f645ff16c
+          name: 'Borg Repositories Discovery'
+          key: 'borg.discover[{$BORG_LOCAL_DIR}]'
+          delay: '1800'
+          item_prototypes:
+            -
+              uuid: 3304d8a256974884879c43d80ec6f28d
+              name: '{#HOST}:{#DIR} volume compressed size'
+              key: 'borg.all_compressed[{#PATH}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: 4b5bf7bd283340258ac3b41323ae2db7
+              name: '{#HOST}:{#DIR} volume deduplicated size'
+              key: 'borg.all_deduplicated[{#PATH}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: d17aefd482fd42fba9eb6f98b940be1c
+              name: '{#HOST}:{#DIR} volume original size'
+              key: 'borg.all_original[{#PATH}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: c5ed6859338e47e7b51c600d23c77c85
+              name: '{#HOST}:{#DIR} backup check status'
+              key: 'borg.check[{#PATH}]'
+              delay: '3600'
+              valuemap:
+                name: 'Backup Status'
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+              trigger_prototypes:
+                -
+                  uuid: 9b7524e35e81456c8d6f54fbb26cdd9e
+                  expression: 'last(/Template App Borg Backup/borg.check[{#PATH}])=1'
+                  name: '{#HOST}:{#DIR} backup check failed'
+                  priority: HIGH
+                  description: 'Backup could be inconsistent or could contain damaged chunks. Please try a repair of the borg repository'
+                -
+                  uuid: 52f4d17c10004fa89e26f0f0b0d516ae
+                  expression: 'find(/Template App Borg Backup/borg.check[{#PATH}],#1,"regexp","missing")=1'
+                  name: '{#HOST}:{#DIR} backup monitoring failed, {#DIR}/status.txt is missing or unreadable'
+                  priority: WARNING
+                  description: 'Check your backup script that it writes to status.txt inside the borg repository itself and that the zabbix user on the backup machine has read permissions'
+            -
+              uuid: 1d1ca5c9d1de463db3c20740a8aa7ecd
+              name: '{#HOST}:{#DIR} end timestamp'
+              key: 'borg.end_timestamp[{#PATH}]'
+              delay: '3600'
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+              trigger_prototypes:
+                -
+                  uuid: c76b97611fab46a597fbd7ddc60ac1e7
+                  expression: 'fuzzytime(/Template App Borg Backup/borg.end_timestamp[{#PATH}],108000s)=0'
+                  name: '{#HOST}:{#DIR} backup too old'
+                  priority: WARNING
+            -
+              uuid: cffe737ddec24beda22e1c9903477971
+              name: '{#HOST}:{#DIR} end time'
+              key: 'borg.end_time[{#PATH}]'
+              delay: '3600'
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: 36a2a7ad75e34f19bd4a0c9225d1ccf9
+              name: '{#HOST}:{#DIR} start timestamp'
+              key: 'borg.start_timestamp[{#PATH}]'
+              delay: '3600'
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: 97858e1d236940d18140c4006b9b4d98
+              name: '{#HOST}:{#DIR} start time'
+              key: 'borg.start_time[{#PATH}]'
+              delay: '3600'
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: e2cf851736934afaaf5b8150a935c36a
+              name: '{#HOST}:{#DIR} last backup compressed size'
+              key: 'borg.this_compressed[{#PATH}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: 40fab5e2b9774b88afa58c3fd8de94e6
+              name: '{#HOST}:{#DIR} last backup deduplicated size'
+              key: 'borg.this_deduplicated[{#PATH}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: 1b6a9dac0cbc4554834e7baf9abc1093
+              name: '{#HOST}:{#DIR} last backup original size'
+              key: 'borg.this_original[{#PATH}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+          graph_prototypes:
+            -
+              uuid: 00df34255c034212a34cd436ccd0a116
+              name: 'Borg {#HOST}:{#DIR} last backup'
+              graph_items:
+                -
+                  color: 1A7C11
+                  item:
+                    host: 'Template App Borg Backup'
+                    key: 'borg.this_deduplicated[{#PATH}]'
+                -
+                  sortorder: '1'
+                  color: 2774A4
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Template App Borg Backup'
+                    key: 'borg.this_compressed[{#PATH}]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Template App Borg Backup'
+                    key: 'borg.this_original[{#PATH}]'
+            -
+              uuid: 723f6f61e0f748f69773891348b1c045
+              name: 'Borg {#HOST}:{#DIR} volume size'
+              graph_items:
+                -
+                  color: 1A7C11
+                  item:
+                    host: 'Template App Borg Backup'
+                    key: 'borg.all_deduplicated[{#PATH}]'
+                -
+                  sortorder: '1'
+                  color: 2774A4
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Template App Borg Backup'
+                    key: 'borg.all_compressed[{#PATH}]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Template App Borg Backup'
+                    key: 'borg.all_original[{#PATH}]'
+      valuemaps:
+        -
+          uuid: 8f2d3843365d4c758e00814d19da12b2
+          name: 'Backup Status'
+          mappings:
+            -
+              value: '0'
+              newvalue: OK
+            -
+              value: '1'
+              newvalue: FAIL
+    -
+      uuid: 17de848859114419bc2cfad45256cead
+      template: 'Template App Borg Backup Remote'
+      name: 'Template App Borg Backup Remote'
+      groups:
+        -
+          name: Templates
+      discovery_rules:
+        -
+          uuid: 58c767d5544f46e8b0f8c1c670a20ade
+          name: 'Borg Repositories Discovery Remote'
+          key: 'borg.discover_remote[{$SSH_USER},{$SSH_HOST},{$BORG_REMOTE_DIR}]'
+          delay: '1800'
+          item_prototypes:
+            -
+              uuid: e064e1a80d8146b9ab2f231373bd8961
+              name: '{#HOST}:{#DIR} volume compressed size'
+              key: 'borg.all_compressed_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: 5a16aa85d5d44bda99aa501b91cf4d92
+              name: '{#HOST}:{#DIR} volume deduplicated size'
+              key: 'borg.all_deduplicated_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: d503f3daa1fb48679ff5238514be293a
+              name: '{#HOST}:{#DIR} volume original size'
+              key: 'borg.all_original_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: 77795e6add53482794b7477869e9b8d7
+              name: '{#HOST}:{#DIR} backup check status'
+              key: 'borg.check_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              valuemap:
+                name: 'Backup Status'
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+              trigger_prototypes:
+                -
+                  uuid: 84479c46352d40f1a1500cee75a66566
+                  expression: 'last(/Template App Borg Backup Remote/borg.check_remote[{#PATH},{$SSH_USER},{$SSH_HOST}])=1'
+                  name: '{#HOST}:{#DIR} backup check failed'
+                  priority: HIGH
+                  description: 'Backup could be inconsistent or could contain damaged chunks. Please try a repair of the borg repository'
+                -
+                  uuid: b7d7c406f3b54717af33254f16b72538
+                  expression: 'find(/Template App Borg Backup Remote/borg.check_remote[{#PATH},{$SSH_USER},{$SSH_HOST}],#1,"regexp","missing")=1'
+                  name: '{#HOST}:{#DIR} backup monitoring failed, {#DIR}/status.txt is missing or unreadable'
+                  priority: WARNING
+                  description: 'Check your backup script that it writes to status.txt inside the borg repository itself and that the zabbix user on the backup machine has read permissions'
+            -
+              uuid: f420e30b3dab411f882b157a86bdcac5
+              name: '{#HOST}:{#DIR} end timestamp'
+              key: 'borg.end_timestamp_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+              trigger_prototypes:
+                -
+                  uuid: 3e9179172d2348c09aa0d9926fba798b
+                  expression: 'fuzzytime(/Template App Borg Backup Remote/borg.end_timestamp_remote[{#PATH},{$SSH_USER},{$SSH_HOST}],108000s)=0'
+                  name: '{#HOST}:{#DIR} backup too old'
+                  priority: WARNING
+            -
+              uuid: c919a95479c34daf9d6fcc8b8cb3c47a
+              name: '{#HOST}:{#DIR} end time'
+              key: 'borg.end_time_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: 2b9b610c545b4bf5b4e17014fb4c1b66
+              name: '{#HOST}:{#DIR} start timestamp'
+              key: 'borg.start_timestamp_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: c28aa61e8f86420cb1a50a736f23a6e2
+              name: '{#HOST}:{#DIR} start time'
+              key: 'borg.start_time_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: df846ece371f400799d62ad4fa8ef80c
+              name: '{#HOST}:{#DIR} last backup compressed size'
+              key: 'borg.this_compressed_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: 734661b530f14266a5b36ff2731cf463
+              name: '{#HOST}:{#DIR} last backup deduplicated size'
+              key: 'borg.this_deduplicated_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+            -
+              uuid: 25b9ccc498b840898519614b252f74ff
+              name: '{#HOST}:{#DIR} last backup original size'
+              key: 'borg.this_original_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+              delay: '3600'
+              units: Bytes
+              tags:
+                -
+                  tag: Application
+                  value: 'Borg Backup Statistics'
+          graph_prototypes:
+            -
+              uuid: 233805a0359a41a4beb3562f7a67ebff
+              name: 'Borg {#HOST}:{#DIR} last backup'
+              graph_items:
+                -
+                  color: 1A7C11
+                  item:
+                    host: 'Template App Borg Backup Remote'
+                    key: 'borg.this_deduplicated_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+                -
+                  sortorder: '1'
+                  color: 2774A4
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Template App Borg Backup Remote'
+                    key: 'borg.this_compressed_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Template App Borg Backup Remote'
+                    key: 'borg.this_original_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+            -
+              uuid: b84c269a99dc47c9945e82f82abd288e
+              name: 'Borg {#HOST}:{#DIR} volume size'
+              graph_items:
+                -
+                  color: 1A7C11
+                  item:
+                    host: 'Template App Borg Backup Remote'
+                    key: 'borg.all_deduplicated_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+                -
+                  sortorder: '1'
+                  color: 2774A4
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Template App Borg Backup Remote'
+                    key: 'borg.all_compressed_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Template App Borg Backup Remote'
+                    key: 'borg.all_original_remote[{#PATH},{$SSH_USER},{$SSH_HOST}]'
+      valuemaps:
+        -
+          uuid: 25777189beda423bb1b7c64f6d84b5f2
+          name: 'Backup Status'
+          mappings:
+            -
+              value: '0'
+              newvalue: OK
+            -
+              value: '1'
+              newvalue: FAIL
