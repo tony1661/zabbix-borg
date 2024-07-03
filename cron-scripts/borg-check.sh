@@ -10,24 +10,27 @@ BLUE='\033[1;34m'
 #check for no argments
 if [ $# -eq 0 ]; then
         echo ""
-        echo -e "No arguments provided. ${RED}Usage: borg-check.sh <remote|local> <path-to-status.txt-file> [ssh-host-string]${NC}"
+        echo -e "No arguments provided. ${RED}Usage:${NC} borg-check.sh <remote|local> <path-to-status.txt-file>"
+        echo -e "${RED}Example:${NC} borg-check.sh local /data/home/borg/status.txt"
+        echo -e "${RED}Example:${NC} borg-check.sh remote user@server.domain.com:/data/home/borg/status.txt"
         echo ""
         echo -e "${BLUE}remote|local ${NC}- is the repo a local repo or a remote repo over ssh"
-        echo -e "${BLUE}<path to status.txt file> ${NC}- path to the status file inside the repo. If it is a remote directory, use an absolute path"
-        echo -e "${BLUE}ssh-host-string ${NC}- only needed for remote repos. Should be like this: user@server.domain.com"
+        echo -e "${BLUE}<path to status.txt file> ${NC}- path to the status file inside the repo. Use an absolute path"
         echo ""
         exit 1
 fi
 
+status_file=$(echo "$2" | cut -d ":" -f 2)
+ssh_string=$(echo "$2" | cut -d ":" -f 1)
 # vars
-repo_dir=$(dirname $2)
-ssh_string=$3
+repo_dir=$(dirname $status_file)
 
-# Uncomment to enable unencrypted repos
+
+# Uncomment to enable unknown unencrypted repos
 #export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
 
-# Comment to disable encrypted repos
-export BORG_PASSPHRASE=''
+# Uncomment to enable encrypted repos and set the passphrase
+#export BORG_PASSPHRASE=''
 
 if [ $1 = 'local' ]; then
         #save output in a variable to avoid overwritting the file partially
