@@ -1,21 +1,22 @@
 A Zabbix template for monitoring Borg backup repositories. Requires Borg binary to be available in the system being monitored. Monitoring occurs on the backup server, though is possible to have the backup server check remote repositories via SSH for services such as rsync.net.
 
-In this documentation, there are multiple references to Local and Remote repositories. Just to be clear, Local repos are ones located on the server that the zabbix-agent is running on. Remote repos are ones where the borg repo is located on a different server than the zabbox-agent that will be doing the monitoring.
+In this documentation, there are multiple references to Local and Remote repositories. Just to be clear, Local repos are ones located on the server that the zabbix-agent is running on. Remote repos are ones where the borg repo is located on a different server than the zabbix-agent that will be doing the monitoring.
 
 # How it works
 This plugin assumes that you have taken your backup and placed it in a local or remote folder.
 
-Once that is complete, you need to run the `cron-scripts/borg-check.sh` script. This script will run a `borg info` to get data on the current size of your repository as well as `borg check` to check the integrity of the data in the repo. The check command can be very time consuming so for testing, you may want to comment it out.
+Once that is complete, you need to run the `cron-scripts/borg.sh` script. This script will run a `borg info` to get data on the current size of your repository as well as `borg check` to check the integrity of the data in the repo. The check command can be very time consuming so for testing, you may want to run only the info command.
 
 The script takes 2 parameters.
 
-Usage: `cron-scripts/borg-check.sh <remote|local> <path-to-status.txt-file>`
+Usage: `cron-scripts/borg.sh <info|check> <remote|local> <path-to-status.txt-file>`
+ - *<info|check>* - the borg task that should be run
  - *<remote|local>* - is the repo a local repo or a remote repo over ssh
  - *<path-to-status.txt-file>* - path to the status file inside the repo. Use an absolute path
 
- **Example:** `/etc/cron.d/borg-check.sh local /data/home/borg/status.txt`
+ **Example:** `/etc/cron.d/borg.sh info local /data/home/borg/status.txt`
  
- **Example:** `/etc/cron.d/borg-check.sh remote user@server.domain.com:/data/home/borg/status.txt`
+ **Example:** `/etc/cron.d/borg.sh check remote user@server.domain.com:/data/home/borg/status.txt`
 
 This script will populate a status.txt file inside the repo folder. This is true for both local and remote repositories. Below is a sample of what the status.txt file will be populated with:
 ```
@@ -55,7 +56,7 @@ All of the collected data will be placed in your Zabbix host assuming you have t
 
 # Installation
 ## General Steps
-1. Add `cron-scripts/borg-check.sh` to a cronjob. If using encrypted repositories, be sure to read the cronjob scripts and uncomment line needed.
+1. Add `cron-scripts/borg.sh` to a cronjob. If using encrypted repositories, be sure to read the cronjob scripts and uncomment line needed.
 2. Copy `zabbix_agentd.d/borg.conf` to the Zabbix agent's configuration directory (usually located at `/etc/zabbix`).
 3. Import template configuration `templates/borg.xml` to Zabbix web frontend.
 4. Restart the zabbix-agent service with the command `sudo systemctl restart zabbix-agent.service` or `sudo systemctl restart zabbix-agent2.service`
