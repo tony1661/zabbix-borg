@@ -7,14 +7,14 @@ This plugin assumes that you have taken your backup and placed it in a local or 
 
 Once that is complete, you need to run the `cron-scripts/borg-check.sh` script. This script will run a `borg info` to get data on the current size of your repository as well as `borg check` to check the integrity of the data in the repo. The check command can be very time consuming so for testing, you may want to comment it out.
 
-The script takes 3 parameters.
+The script takes 2 parameters.
 
-Usage: `cron-scripts/borg-check.sh <remote|local> <path-to-status.txt-file> [ssh-host-string]`
+Usage: `cron-scripts/borg-check.sh <remote|local> <path-to-status.txt-file>`
  - *<remote|local>* - is the repo a local repo or a remote repo over ssh
- - *<path-to-status.txt-file>* - path to the status file inside the repo. If it is a remote directory, use an absolute path
- - *[ssh-host-string]* - only needed for remote repos. Should be like this: user@server.domain.com
+ - *<path-to-status.txt-file>* - path to the status file inside the repo. Use an absolute path
 
- **Example:** /etc/cron.d/borg-check-remote.sh remote /home/borg/repo-dir/status.txt user@server.domain.com
+ **Example:** /etc/cron.d/borg-check.sh local /data/home/borg/status.txt
+ **Example:** /etc/cron.d/borg-check.sh remote user@server.domain.com:/data/home/borg/status.txt
 
 This script will populate a status.txt file inside the repo folder. This is true for both local and remote repositories. Below is a sample of what the status.txt file will be populated with:
 ```
