@@ -49,7 +49,7 @@ elif [ $2 = 'remote' ]; then
                 echo "$info" | ssh $ssh_string 'dd of='$status_file
         elif [ $1 = 'check' ]; then
 		#check=$(borg check -v $ssh_string:$repo_dir 2>&1)
-		echo 'Time: '$(date +"%Y-%m-%d %H:%M:%S") | ssh $ssh_string 'dd of='$repo_dir'/check.txt conv=notrunc'
+		echo 'Time: '$(date +"%Y-%m-%d %H:%M:%S") | ssh $ssh_string 'dd of='$repo_dir'/check.txt'
                 echo "$check" | ssh $ssh_string 'dd of='$repo_dir'/check.txt oflag=append conv=notrunc'
         fi
 else
